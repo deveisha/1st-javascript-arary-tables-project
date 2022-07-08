@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body{
+    background-color:rgb(246, 246, 198)
+    }
+    h3{
+        text-align: center;
+        margin-top: 100px;
+        font-size:xx-large;
+    }
+    h4{
+        margin-bottom: 50px;
+        text-align: center;
+        font-size: larger;
+    }
+    button{
+        background-color: rgb(39, 80, 192);
+    }
+    
+</style>
+
+<body>
+    <div>
+        <h3>Array, function, table</h3>
+        <h4 id="showoff"></h4>
+        <table border="4" cellpadding="20" style="font: size 50px;margin-top: 40px;
+            margin-left: auto;
+            margin-right: auto;">
+            <tr id="myrow">
+                <!-- <td>
+
+            </td> -->
+            </tr>
+
+        </table>
+        <div style="text-align: center; margin-top: 40px;" >
+        ASC<input type="radio" value="asc" name="sort" onchange="sort(event)">
+        DES<input type="radio" value="des" name="sort" onchange="sort(event)">
+        <button style="margin: 10px; padding: 10px;" onclick="addNum()">Add Number</button>
+        <button style="margin: 10px; padding: 10px; " onclick="evenFunc()">Even Number</button>
+        <button style="margin: 10px; padding: 10px;"  onclick="oddFunc()">Odd Number</button>
+        <button style="margin: 10px; padding: 10px;" onclick='leftMove()'>Move Left</button>
+        <button style="margin: 10px; padding: 10px;" onclick="rightMove()">Right Move</button>
+        <button style="margin: 10px; padding: 10px;" onclick='updatefunc()'>Edit</button>
+        <button style="margin: 10px; padding: 10px;" onclick="removeFunc()">Remove</button>
+    </div>
+    <script>
+  let selectData=null;
+  let selectIndex=null;
+
+        let myArray = [1, 25, 6, 100, 20, 4];
+        let renderMyTable = () => {
+            myrow.innerHTML = "";
+            myArray.forEach((val, index) => {
+                //  console.log("val", val+" ====> "+index)
+                myrow.innerHTML += `<td onclick='Selection(event)' class="number" id='${index}'>
+                    ${val}
+                     </td>`
+            })
+        }
+        renderMyTable();
+
+        //For the sake of getting value of its index from the given array
+
+const Selection=(val)=>{
+
+    selectData=val.target.innerText;
+    selectIndex=val.target.id
+     console.log("selectData=====>",val.target.id);
+    showoff.innerText=`${selectData} is selected and its index is ${selectIndex}`
+
+}
+//delete a specific/selectedVal 
+//== or === (comparision)
+
+const removeFunc = () => {
+      console.log("selectedData", selectData)
+           const newArrays= myArray?.filter(item=>item!=selectData)
+           console.log("newArrays", myArray?.filter(item=>item!=selectData))
+           let renderMyTable = () => {
+        myrow.innerHTML = "";
+       newArrays.forEach((val, index) => {
+          //  console.log("val", val+" ====> "+index)
+          myrow.innerHTML += `<td onclick='Selection(event)' class="number" id='${index}'>
+                    ${val}
+                     </td>`;
+        });
+      };
+    }
+
+//e.g
+// const myProfile=[1,2,3,4]
+// console.log(myProfile[2])
+const leftMove=()=>{
+    if(selectData==null){
+        alert("Please select the value from  given array first!")
+    }
+    else{
+        if(selectIndex==0){
+            alert("Not move left anymore! ");
+        }
+        else{
+            let prep=myArray[selectIndex-1];
+     
+            myArray[selectIndex-1]=selectData;
+            
+             myArray[selectIndex]=prep;
+             console.log(" myArray[selectData]===>", myArray[selectData]);
+             selectIndex=selectIndex-1;
+             console.log("selectIndex", selectIndex);
+
+
+        }
+        renderMyTable();
+    }
+}
+const rightMove=()=>{
+    if(selectData==null){
+        alert("Please select the value from  given array first!")
+    }
+    else{
+        if(selectIndex==myArray.length-1){
+            alert("cannot move right anymore! ");
+        }
+        else{
+                
+            
+            let post=myArray[parseInt(selectIndex)+1];
+     
+             myArray[parseInt(selectIndex)+1]=selectData;
+            
+              myArray[parseInt(selectIndex)]=post;
+            //   console.log(" myArray[selectData]===>", myArray[selectData]);
+              selectIndex=parsInt(selectIndex)+1;
+            //   console.log("selectIndex", selectIndex);
+
+
+        }
+        renderMyTable();
+}
+
+}
+
+
+  //For the sake of Sort value inside the array coresspondening the asc/des
+        let sort = (ele) => {
+            if (ele.target.value == 'asc') {
+                myArray.sort((num1, num2) => {
+                    if (num1 > num2) {
+                        return 1;
+                    }
+                    else if (num1 < num2) {
+                        return -1;
+                    }
+                    else {
+                        return 0;
+                    }
+                });
+            }
+            else if (ele.target.value == 'des') {
+                myArray.sort((num1, num2)=>{
+                    if(num1>num2){
+                        return -1;
+                    }
+                    else if (num1 < num2) {
+                        return 1;
+                    }
+                    else{
+                        return 0;
+                    }
+
+                })
+
+            }
+            renderMyTable();
+
+        }
+
+        let addNum=()=>{
+            // console.log("Hello from addNum Func========>")
+            let newNumber=+prompt("Enter a number ");
+            console.log("Hello from addNum Func========>", newNumber);
+            if(isNaN(newNumber)){
+
+                alert("Invalid choice, make sure your input first!");
+            }
+            else{
+                myArray.push(newNumber);
+                renderMyTable();
+            }
+        }
+
+        //even function 
+        let evenFunc=()=>{
+            let cell=document.getElementsByClassName("number");
+            for(let item of cell){
+                //item.style.backgroundColor="white";
+                item.style.border="2px solid grey";
+                //item.style.backgroundColor="green";
+                if(item.innerHTML%2===0){
+                    item.style.backgroundColor="green";
+                    item.style.color="white";
+                }
+
+            }
+
+
+        }
+        let oddFunc=()=>{
+            let cell=document.getElementsByClassName("number");
+            for(let item of cell){
+                //item.style.backgroundColor="white";
+                item.style.border="2px solid grey";
+                //item.style.backgroundColor="green";
+                if(item.innerHTML%2!==0){
+                    item.style.backgroundColor="red";
+                    item.style.color="white";
+                }
+
+            }
+
+
+        }
+
+    </script>
+</body>
+
+</html>
